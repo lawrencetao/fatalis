@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <context id="mysqlGenerator" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库链接地址账号密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://120.92.82.51:3306/tangram_v2?Unicode=true&amp;characterEncoding=utf8&amp;useSSL=false"
+                        userId="lima_user"
+                        password="Mysql@1234"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成Model类存放位置 -->
+        <javaModelGenerator targetPackage="com.lawrence.fatalis.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成映射xml文件存放位置 -->
+        <sqlMapGenerator targetPackage="com.lawrence.fatalis.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 生成dao类存放位置 -->
+        <!-- type: ANNOTATEDMAPPER(基于注解的Mapper对象), MIXEDMAPPER(Mapper对象), XMLMAPPER(Mapper接口) -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawrence.fatalis.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- 生成对应表及类名 -->
+        <table tableName="org_user" domainObjectName="OrgUser" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+
+    </context>
+</generatorConfiguration>

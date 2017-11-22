@@ -1,0 +1,146 @@
+### ------------------------------------------------------------ ###
+###                          公共配置                             ###
+### ------------------------------------------------------------ ###
+
+### 项目配置(jar包部署时生效)
+server:
+  port: 80
+  context-path: /fatalis-webapp
+
+### fatalis配置
+fatalis:
+  redis-cluster-open: false #redis-cluster集群开关, true/false对应ClusterOperator/RedisOperator的@Component
+  multi-datasource-open: false #多数据源读写分离开关, 读写service事务用@WriteDataSource, 只读service事务用@ReadDataSource
+  swagger2-open: true #swagger2开关, true时可开启swagger2调试及创建文档
+  uri-logging-open: true #日志打印uri访问开关, true时可打印所有访问uri地址
+
+### mybatis-plus配置
+mybatis-plus:
+  mapperLocations: classpath:com/lawrence/fatalis/mapper/*.xml
+  typeAliasesPackage: com.lawrence.fatalis.model, com.lawrence.fatalis.view
+  mapperScanPackage: com.lawrence.fatalis.dao
+  configLocation: classpath:mybatis-config.xml
+
+### spring配置
+spring:
+  profiles:
+    active: dev #当前启用的profiles
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  devtools:
+    restart:
+      enabled: false #开发者工具
+      additional-paths: src/main/java
+      exclude: static/**, templates/**
+  aop:
+    proxy-target-class: true #代理模式Cglib
+  jmx:
+    default-domain: fatalis-webapp
+
+
+
+---
+### ------------------------------------------------------------ ###
+###                          开发环境                             ###
+### ------------------------------------------------------------ ###
+
+### profiles-dev配置
+spring:
+  profiles: dev
+
+### redis, druid配置
+fatalis:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    readSize: 1
+    master: #druid读/写数据源
+      url: jdbc:mysql://172.168.0.21:3306/tangram_v2?Unicode=true&characterEncoding=utf8&useSSL=false
+      username: lima_user
+      password: 0nY5AzOqdM_H4sd9U26SdA
+    slave: #druid只读数据源
+      - url: jdbc:mysql://
+        username:
+        password:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: AlkgqXxMhMyT8MNAK4wkVg
+    cluster: #redis集群配置
+      nodes:
+        -
+        -
+      password:
+
+
+
+---
+### ------------------------------------------------------------ ###
+###                          测试环境                             ###
+### ------------------------------------------------------------ ###
+
+### profiles-test配置
+spring:
+  profiles: test
+
+### redis, druid配置
+fatalis:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    readSize: 1
+    master: #druid读/写数据源
+      url: jdbc:mysql://172.31.110.142:3306/tangram?Unicode=true&characterEncoding=utf8&useSSL=false
+      username: admin
+      password: zpZxNQKrfifkJLbqSNaIPQ
+    slave: #druid只读数据源
+      - url: jdbc:mysql://
+        username:
+        password:
+  redis:
+    host: 172.31.110.146
+    port: 6379
+    password:
+    cluster: #redis集群配置
+      nodes:
+        -
+        -
+      password:
+
+
+
+---
+### ------------------------------------------------------------ ###
+###                          生产环境                             ###
+### ------------------------------------------------------------ ###
+
+### profiles-pro配置
+spring:
+  profiles: pro
+
+### redis, druid配置
+fatalis:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    readSize: 1
+    master: #druid读/写数据源
+      url: jdbc:mysql://
+      username:
+      password:
+    slave: #druid只读数据源
+      - url: jdbc:mysql://
+        username:
+        password:
+  redis:
+    host:
+    port:
+    password:
+    cluster: #redis集群配置
+      nodes:
+        -
+        -
+      password:
+
+

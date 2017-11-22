@@ -1,0 +1,84 @@
+### ------------------------------------------------------------ ###
+###                          公共配置                             ###
+### ------------------------------------------------------------ ###
+
+### 项目配置(jar包部署时生效)
+server:
+  port: 8090
+  context-path: /fatalis-quartz
+
+### spring配置
+spring:
+  profiles:
+    active: dev #当前启用的profiles
+  devtools:
+    restart:
+      enabled: false #开发者工具
+      additional-paths: src/main/java
+      exclude: static/**, templates/**
+  jmx:
+    default-domain: fatalis-quartz
+
+### mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath*:com/lawrence/fatalis/mapper/*.xml
+  typeAliasesPackage: com.lawrence.fatalis.model, com.lawrence.fatalis.view
+  global-config:
+    id-type: 3  #0:数据库ID自增, 1:用户输入id, 2:全局唯一id(IdWorker), 3:全局唯一ID(uuid)
+    db-column-underline: false
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true
+
+### 定时任务配置
+schedule:
+  dynamicTask1:
+    cron: 0/5 * * * * ?
+
+
+
+---
+### ------------------------------------------------------------ ###
+###                          开发环境                             ###
+### ------------------------------------------------------------ ###
+### profiles-dev配置
+spring:
+  profiles: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.168.0.21:3306/tangram_v2?Unicode=true&characterEncoding=utf8&useSSL=false
+    username: lima_user
+    password: 0nY5AzOqdM_H4sd9U26SdA
+
+
+
+---
+### ------------------------------------------------------------ ###
+###                          测试环境                             ###
+### ------------------------------------------------------------ ###
+### profiles-test配置
+spring:
+  profiles: test
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.31.110.142:3306/tangram?Unicode=true&characterEncoding=utf8&useSSL=false
+    username: admin
+    password: zpZxNQKrfifkJLbqSNaIPQ
+
+
+
+---
+### ------------------------------------------------------------ ###
+###                          生产环境                             ###
+### ------------------------------------------------------------ ###
+### profiles-pro配置
+spring:
+  profiles: pro
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://
+    username:
+    password:

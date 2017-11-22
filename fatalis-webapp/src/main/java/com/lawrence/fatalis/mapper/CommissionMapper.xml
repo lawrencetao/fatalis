@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lawrence.fatalis.dao.CommissionDao">
+
+    <resultMap id="BaseMap" type="com.lawrence.fatalis.model.Commission">
+        <result column="sid" property="sid" jdbcType="VARCHAR" />
+        <result column="config" property="config" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="query" resultMap="BaseMap">
+        select sid, config from commission
+    </select>
+
+    <select id="select" resultMap="BaseMap" parameterType="java.lang.String">
+        select sid, config from commission where sid = #{0}
+    </select>
+
+    <insert id="insert" parameterType="com.lawrence.fatalis.model.Commission">
+        insert into commission(sid, config) values (#{sid}, #{config})
+    </insert>
+
+    <update id="update" parameterType="com.lawrence.fatalis.model.Commission">
+        update commission set config = #{config} where sid = #{sid}
+    </update>
+</mapper>
