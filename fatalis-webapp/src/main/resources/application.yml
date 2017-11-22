@@ -13,7 +13,7 @@ fatalis:
   multi-datasource-open: false #多数据源读写分离开关, 读写service事务用@WriteDataSource, 只读service事务用@ReadDataSource
   swagger2-open: true #swagger2开关, true时可开启swagger2调试及创建文档
   uri-logging-open: true #日志打印uri访问开关, true时可打印所有访问uri地址
-  rabbitmq-open: false #rabbitmq开关, 开启可实现direct模式的rabbitmq消息队列
+  rabbitmq-open: true #rabbitmq开关, 开启可实现direct模式的rabbitmq消息队列
 
 ### mybatis-plus配置
 mybatis-plus:

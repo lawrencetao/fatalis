@@ -1,5 +1,7 @@
 package com.lawrence.fatalis.rabbitmq;
 
+import com.lawrence.fatalis.config.rabbitmq.RabbitConfig;
+import com.lawrence.fatalis.test.TestObj;
 import com.lawrence.fatalis.util.LogUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,13 +13,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnProperty(prefix = "fatalis", name = "rabbitmq-open", havingValue = "true")
-@RabbitListener(queues = "dateQueue")
+@RabbitListener(queues = RabbitConfig.DIRECT_QUEUE)
 public class RabbitReceiver {
 
     @RabbitHandler
-    public void receiveMessage(String message) {
+    public void receiveMessage(TestObj message) {
 
-        LogUtil.info(getClass(), "消息队列dateQueue接收: " + message);
+        LogUtil.info(getClass(), "消息队列" + RabbitConfig.DIRECT_QUEUE + "接收: " + message.toString());
 
     }
 

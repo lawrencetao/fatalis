@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lawrence.fatalis.base.BaseController;
+import com.lawrence.fatalis.base.SpringContext;
+import com.lawrence.fatalis.config.FatalisProperties;
 import com.lawrence.fatalis.constant.ReloadConstant;
 import com.lawrence.fatalis.model.Commission;
-import com.lawrence.fatalis.rabbitmq.RabbitReceiver;
 import com.lawrence.fatalis.rabbitmq.RabbitSender;
+import com.lawrence.fatalis.redis.ClusterOperator;
 import com.lawrence.fatalis.redis.RedisOperator;
 import com.lawrence.fatalis.service.CommissionService;
 import com.lawrence.fatalis.test.TestObj;
@@ -115,30 +117,28 @@ public class TestController extends BaseController {
     }
 
     @Resource
-    private RedisOperator redisOperator;
-    /*@Resource
-    private ClusterOperator clusterOperator;*/
+    private FatalisProperties fatalisProperties;
 
     /**
      * 测试redis和集群cluster
      *
-     * @param type, param
+     * @param id
      * @return JSONObject
      */
     @RequestMapping(value = "/redis", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiIgnore
-    public JSONObject redis(String type, String param) {
+    public JSONObject redis(String id) {
         TestObj to = new TestObj();
-        to.setId(param);
+        to.setId(id);
 
-        if ("set".equals(type)) {
-            redisOperator.setObject("test", to);
-        } else if ("get".equals(type)) {
-            to = redisOperator.getObject("test");
-            to.setList(new ArrayList<>());
+        if (fatalisProperties.getRedisClusterOpen()) {
+            ClusterOperator clusterOperator = (ClusterOperator) SpringContext.getBean("clusterOperator");
+            clusterOperator.setObject("test", to);
+            to = clusterOperator.getObject("test", TestObj.class);
         } else {
-
-            return new JSONObject();
+            RedisOperator redisOperator = (RedisOperator) SpringContext.getBean("redisOperator");
+            redisOperator.setObject("test", to);
+            to = redisOperator.getObject("test");
         }
 
         JSONObject json = new JSONObject();
@@ -256,21 +256,17 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @Resource
-    private RabbitSender sender;
-    @Resource
-    private RabbitReceiver receiver;
-
     @RequestMapping(value = "/mq", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiIgnore
-    public JSONObject mq(HttpServletRequest request) {
-        String date = DateUtil.getCurrentDateString("yyyyMMddHHmmssSSS");
-        sender.sendMessage(date);
+    public JSONObject mq(HttpServletRequest request, String id) {
+        TestObj to = new TestObj();
+        to.setId(id);
+        to.setList(new ArrayList<>());
+        to.setJson(JSON.parseObject("{\"mq\":\"mqtest\"}"));
+        RabbitSender rabbitSender = (RabbitSender) SpringContext.getBean("rabbitSender");
+        rabbitSender.sendMessage(to);
 
-        JSONObject json = new JSONObject();
-        json.put("mq", date);
-
-        return json;
+        return pubResponseJson(true, "Mq消息发送成功", to);
     }
 
     public static void main(String[] args) {

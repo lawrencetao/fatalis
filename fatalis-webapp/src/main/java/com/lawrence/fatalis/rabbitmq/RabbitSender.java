@@ -1,5 +1,7 @@
 package com.lawrence.fatalis.rabbitmq;
 
+import com.lawrence.fatalis.config.rabbitmq.RabbitConfig;
+import com.lawrence.fatalis.test.TestObj;
 import com.lawrence.fatalis.util.LogUtil;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,10 +23,10 @@ public class RabbitSender {
     /**
      * 发送消息
      */
-    public void sendMessage(String message) {
-        rabbitTemplate.convertAndSend("dateQueue", message);
+    public void sendMessage(TestObj message) {
+        rabbitTemplate.convertAndSend(RabbitConfig.DIRECT_QUEUE, message);
 
-        LogUtil.info(getClass(), "消息队列dateQueue发送: " + message);
+        LogUtil.info(getClass(), "消息队列" + RabbitConfig.DIRECT_QUEUE + "发送: " + message.toString());
 
     }
 
