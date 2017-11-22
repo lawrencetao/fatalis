@@ -13,6 +13,7 @@ fatalis:
   multi-datasource-open: false #多数据源读写分离开关, 读写service事务用@WriteDataSource, 只读service事务用@ReadDataSource
   swagger2-open: true #swagger2开关, true时可开启swagger2调试及创建文档
   uri-logging-open: true #日志打印uri访问开关, true时可打印所有访问uri地址
+  rabbitmq-open: false #rabbitmq开关, 开启可实现direct模式的rabbitmq消息队列
 
 ### mybatis-plus配置
 mybatis-plus:
@@ -51,6 +52,12 @@ spring:
 ### profiles-dev配置
 spring:
   profiles: dev
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: lawrence
+    password: lawrence
+    publisher-confirms: true #设置消息回调
 
 ### redis, druid配置
 fatalis:
@@ -60,7 +67,7 @@ fatalis:
     master: #druid读/写数据源
       url: jdbc:mysql://172.168.0.21:3306/tangram_v2?Unicode=true&characterEncoding=utf8&useSSL=false
       username: lima_user
-      password: 0nY5AzOqdM_H4sd9U26SdA
+      password: Mysql@1234
     slave: #druid只读数据源
       - url: jdbc:mysql://
         username:
@@ -68,7 +75,7 @@ fatalis:
   redis:
     host: 127.0.0.1
     port: 6379
-    password: AlkgqXxMhMyT8MNAK4wkVg
+    password: lawrence
     cluster: #redis集群配置
       nodes:
         -
@@ -85,6 +92,12 @@ fatalis:
 ### profiles-test配置
 spring:
   profiles: test
+  rabbitmq:
+      host:
+      port: 5672
+      username:
+      password:
+      publisher-confirms: true #设置消息回调
 
 ### redis, druid配置
 fatalis:
@@ -94,7 +107,7 @@ fatalis:
     master: #druid读/写数据源
       url: jdbc:mysql://172.31.110.142:3306/tangram?Unicode=true&characterEncoding=utf8&useSSL=false
       username: admin
-      password: zpZxNQKrfifkJLbqSNaIPQ
+      password: Admin@1234
     slave: #druid只读数据源
       - url: jdbc:mysql://
         username:
@@ -119,6 +132,12 @@ fatalis:
 ### profiles-pro配置
 spring:
   profiles: pro
+  rabbitmq:
+      host:
+      port: 5672
+      username:
+      password:
+      publisher-confirms: true #设置消息回调
 
 ### redis, druid配置
 fatalis:

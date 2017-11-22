@@ -49,14 +49,17 @@ public class RedisConfig {
         jedisConnectionFactory.setHostName(redisProperties.getHost());
 
         String password = redisProperties.getPassword();
+
         if(StringUtil.isNotNull(password)){
 
             // 配置文件中密码进行解密
-            try {
-                jedisConnectionFactory.setPassword(AESCoder.decrypt(password, AESCoder.CONFIG_KEY));
+            /*try {
+                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            jedisConnectionFactory.setPassword(password);
         }
         jedisConnectionFactory.setPort(redisProperties.getPort());
         jedisConnectionFactory.setTimeout(redisProperties.getTimeout());
@@ -125,14 +128,13 @@ public class RedisConfig {
         if (StringUtil.isNotNull(password)) {
 
             // 配置文件中密码进行解密
-            String decryptCode = "";
-            try {
-                decryptCode = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
+            /*try {
+                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
 
-            return new JedisCluster(nodes, cluster.getTimeout(), cluster.getClusterTimeout(), cluster.getClusterMaxAttempts(), decryptCode, jedisPool);
+            return new JedisCluster(nodes, cluster.getTimeout(), cluster.getClusterTimeout(), cluster.getClusterMaxAttempts(), password, jedisPool);
         } else {
 
             return new JedisCluster(nodes, cluster.getTimeout(), cluster.getClusterTimeout(), cluster.getClusterMaxAttempts(), jedisPool);

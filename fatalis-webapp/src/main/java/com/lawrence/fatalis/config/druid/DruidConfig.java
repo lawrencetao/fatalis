@@ -42,12 +42,17 @@ public class DruidConfig {
         dataSource.setUrl(druidProper.getUrl());
         dataSource.setUsername(druidProper.getUsername());
         String password = druidProper.getPassword();
+
         if (StringUtil.isNotNull(password)) {
-            try {
-                dataSource.setPassword(AESCoder.decrypt(password, AESCoder.CONFIG_KEY));
+
+            // 配置文件中密码进行解密
+            /*try {
+                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            dataSource.setPassword(password);
         }
 
         dataSource.setDriverClassName(druidProper.getDriverClassName());
@@ -94,8 +99,8 @@ public class DruidConfig {
         servletRegistrationBean.addInitParameter("deny", "192.168.0.100");*/
 
         // 登录查看信息的账号密码.
-        servletRegistrationBean.addInitParameter("loginUsername", "taoxuebin");
-        servletRegistrationBean.addInitParameter("loginPassword", "txbhaoren");
+        servletRegistrationBean.addInitParameter("loginUsername", "lawrence");
+        servletRegistrationBean.addInitParameter("loginPassword", "lawrence");
 
         // 是否能够重置数据.
         servletRegistrationBean.addInitParameter("resetEnable", "false");

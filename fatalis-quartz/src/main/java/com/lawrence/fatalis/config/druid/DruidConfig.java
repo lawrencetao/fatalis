@@ -24,12 +24,17 @@ public class DruidConfig {
         dataSource.setUrl(druidProperties.getUrl());
         dataSource.setUsername(druidProperties.getUsername());
         String password = druidProperties.getPassword();
+
         if (StringUtil.isNotNull(password)) {
-            try {
-                dataSource.setPassword(AESCoder.decrypt(password, AESCoder.CONFIG_KEY));
+
+            // 配置文件中密码进行解密
+            /*try {
+                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            dataSource.setPassword(password);
         }
 
         dataSource.setDriverClassName(druidProperties.getDriverClassName());

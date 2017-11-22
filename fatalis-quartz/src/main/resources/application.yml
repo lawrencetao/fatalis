@@ -51,7 +51,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://172.168.0.21:3306/tangram_v2?Unicode=true&characterEncoding=utf8&useSSL=false
     username: lima_user
-    password: 0nY5AzOqdM_H4sd9U26SdA
+    password: Mysql@1234
 
 
 
@@ -66,7 +66,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://172.31.110.142:3306/tangram?Unicode=true&characterEncoding=utf8&useSSL=false
     username: admin
-    password: zpZxNQKrfifkJLbqSNaIPQ
+    password: Admin@1234
 
 
 

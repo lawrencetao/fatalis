@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawrence.fatalis.base.BaseController;
 import com.lawrence.fatalis.constant.ReloadConstant;
 import com.lawrence.fatalis.model.Commission;
+import com.lawrence.fatalis.rabbitmq.RabbitReceiver;
+import com.lawrence.fatalis.rabbitmq.RabbitSender;
 import com.lawrence.fatalis.redis.RedisOperator;
 import com.lawrence.fatalis.service.CommissionService;
 import com.lawrence.fatalis.test.TestObj;
@@ -244,6 +246,29 @@ public class TestController extends BaseController {
 
         JSONObject json = new JSONObject();
         json.put("uid", uid);
+
+        return json;
+    }
+
+    /**
+     * 测试rabbitmq
+     *
+     * @param request
+     * @return JSONObject
+     */
+    @Resource
+    private RabbitSender sender;
+    @Resource
+    private RabbitReceiver receiver;
+
+    @RequestMapping(value = "/mq", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiIgnore
+    public JSONObject mq(HttpServletRequest request) {
+        String date = DateUtil.getCurrentDateString("yyyyMMddHHmmssSSS");
+        sender.sendMessage(date);
+
+        JSONObject json = new JSONObject();
+        json.put("mq", date);
 
         return json;
     }
