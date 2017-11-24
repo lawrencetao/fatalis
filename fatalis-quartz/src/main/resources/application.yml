@@ -56,12 +56,15 @@ spring:
     username: lima_user
     password: Mysql@1234
   rabbitmq:
-      virtual-host: /
-      host: 127.0.0.1
-      port: 5672
-      username: lawrence
-      password: lawrence
-      publisher-confirms: true #设置消息回调
+    virtual-host: /
+    host: 127.0.0.1
+    port: 5672
+    username: lawrence
+    password: lawrence
+    publisher-confirms: true #设置消息回调
+    listener:
+      simple:
+        default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
 
 
 
@@ -78,12 +81,15 @@ spring:
     username:
     password:
   rabbitmq:
-      virtual-host: /
-      host:
-      port: 5672
-      username:
-      password:
-      publisher-confirms: true #设置消息回调
+    virtual-host: /
+    host:
+    port: 5672
+    username:
+    password:
+    publisher-confirms: true #设置消息回调
+    listener:
+      simple:
+        default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
 
 
 
@@ -100,11 +106,14 @@ spring:
     username:
     password:
   rabbitmq:
-      virtual-host: /
-      host:
-      port: 5672
-      username:
-      password:
-      publisher-confirms: true #设置消息回调
+    virtual-host: /
+    host:
+    port: 5672
+    username:
+    password:
+    publisher-confirms: true #设置消息回调
+    listener:
+      simple:
+        default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
 
 

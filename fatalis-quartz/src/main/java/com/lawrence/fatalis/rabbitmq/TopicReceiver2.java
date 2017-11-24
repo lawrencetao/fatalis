@@ -19,6 +19,10 @@ public class TopicReceiver2 {
 
         LogUtil.info(getClass(), "消息队列" + AmqpConfig.TOPIC_QUEUE2 + "接收: " + message.toString());
 
+        // 设定抛出异常, 测试default-requeue-rejected: false
+        /*String str = null;
+        str.toString();*/
+
     }
 
 }
