@@ -11,7 +11,9 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -26,6 +28,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * redis和cluster集群配置
+ */
 @Configuration
 public class RedisConfig {
 
@@ -33,21 +38,23 @@ public class RedisConfig {
     private RedisProperties redisProperties;
 
     /**
-     * 集群开关关闭时, 加载jedisConnectionFactory实例
+     * 集群开关关闭时, 加载redisConnectionFactory实例
      *
-     * @return RedisConnectionFactory
+     * @return JedisConnectionFactory
      */
     @Bean
     @ConditionalOnProperty(prefix = "fatalis", name = "redis-cluster-open", havingValue = "false")
     public RedisConnectionFactory redisConnectionFactory(){
+
+        // redis设置jedisPool配置
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(redisProperties.getMaxTotal());
         poolConfig.setMaxIdle(redisProperties.getMaxIdle());
         poolConfig.setMinIdle(redisProperties.getMinIdle());
 
+        // redis设置jedisConnectionFactory配置
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(poolConfig);
         jedisConnectionFactory.setHostName(redisProperties.getHost());
-
         String password = redisProperties.getPassword();
 
         if(StringUtil.isNotNull(password)){
@@ -97,31 +104,71 @@ public class RedisConfig {
         return redisTemplate;
     }
 
+
+
+    /* ****************************** redis/cluster配置分界线 ****************************** */
+
+
+
     /**
-     * 集群开关打开时, 加载jedisCluster实例
+     * 集群开关打开时, 加载JedisPoolConfig实例
      *
-     * @return JedisCluster
+     * @return JedisPoolConfig
      */
     @Bean
     @ConditionalOnProperty(prefix = "fatalis", name = "redis-cluster-open", havingValue = "true")
-    public JedisCluster redisCluster() {
-        Set<HostAndPort> nodes = new HashSet<>();
-
-        // cluster集群参数
+    public JedisPoolConfig clusterJoolConfig() {
         RedisCluster cluster = redisProperties.getCluster();
 
-        // 连接池最大连接, 最大空闲, 最小空闲,
-        GenericObjectPoolConfig jedisPool = new GenericObjectPoolConfig();
-        jedisPool.setMaxTotal(cluster.getMaxTotal());
-        jedisPool.setMaxIdle(cluster.getMaxIdle());
-        jedisPool.setMinIdle(cluster.getMinIdle());
+        // cluster集群jedisPool配置
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(cluster.getMaxTotal());
+        poolConfig.setMaxIdle(cluster.getMaxIdle());
+        poolConfig.setMinIdle(cluster.getMinIdle());
 
+        return poolConfig;
+    }
+
+    /**
+     * 集群开关打开时, 加载RedisClusterConfiguration实例
+     *
+     * @return RedisClusterConfiguration
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "fatalis", name = "redis-cluster-open", havingValue = "true")
+    public RedisClusterConfiguration redisClusterConfiguration() {
+        RedisCluster cluster = redisProperties.getCluster();
+
+        // cluster集群redisCluster配置
+        RedisClusterConfiguration clusterConfig = new RedisClusterConfiguration();
+
+        // 遍历cluster的nodes集合, 设置nodes
+        Set<RedisNode> nodes = new HashSet<>();
         for (String node : cluster.getNodes()) {
-            String[] parts = StringUtil.split(node, ":");
-            Assert.state(parts.length == 2, "Cluster node shoule be defined as 'host:port', not '" + Arrays.toString(parts) + "'");
-            nodes.add(new HostAndPort(parts[0], Integer.valueOf(parts[1])));
-        }
+            String[] hostAndPort = StringUtil.split(node, ":");
+            Assert.state(hostAndPort.length == 2, "RedisCluster集群节点必须定义为: \"host:port\", 而不是: \"" + Arrays.toString(hostAndPort) + "\"");
 
+            nodes.add(new RedisNode(hostAndPort[0], Integer.valueOf(hostAndPort[1])));
+        }
+        clusterConfig.setClusterNodes(nodes);
+        clusterConfig.setMaxRedirects(cluster.getClusterMaxRedirects());
+
+        return clusterConfig;
+    }
+
+    /**
+     * 集群开关打开时, 加载JedisConnectionFactory实例
+     *
+     * @param clusterConfig, poolConfig
+     * @return JedisConnectionFactory
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "fatalis", name = "redis-cluster-open", havingValue = "true")
+    public JedisConnectionFactory redisClusterConnectionFactory(RedisClusterConfiguration clusterConfig, JedisPoolConfig poolConfig) {
+        RedisCluster cluster = redisProperties.getCluster();
+
+        // cluster集群jedisConnectionFactory配置
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(clusterConfig, poolConfig);
         String password = cluster.getPassword();
 
         // 根据密码配置, 加载不同的jedisCluster构造
@@ -134,10 +181,46 @@ public class RedisConfig {
                 e.printStackTrace();
             }*/
 
-            return new JedisCluster(nodes, cluster.getTimeout(), cluster.getClusterTimeout(), cluster.getClusterMaxAttempts(), password, jedisPool);
+            jedisConnectionFactory.setPassword(password);
+        }
+        jedisConnectionFactory.setTimeout(cluster.getTimeout());
+
+        return jedisConnectionFactory;
+    }
+
+    /**
+     * 集群开关打开时, 加载jedisCluster实例
+     *
+     * @param clusterConfig, poolConfig
+     * @return JedisCluster
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "fatalis", name = "redis-cluster-open", havingValue = "true")
+    public JedisCluster jedisCluster(RedisClusterConfiguration clusterConfig, GenericObjectPoolConfig poolConfig) {
+        RedisCluster cluster = redisProperties.getCluster();
+
+        Set<HostAndPort> hostAndPort = new HashSet<>();
+        for (RedisNode node : clusterConfig.getClusterNodes()) {
+            hostAndPort.add(new HostAndPort(node.getHost(), node.getPort()));
+        }
+        int connectTimeout = cluster.getTimeout();
+        int clusterTimeout = cluster.getClusterTimeout();
+        String password = cluster.getPassword();
+
+        // 根据密码配置, 加载不同的jedisCluster构造
+        if (StringUtil.isNotNull(password)) {
+
+            // 配置文件中密码进行解密
+            /*try {
+                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
+
+            return new JedisCluster(hostAndPort, connectTimeout, clusterTimeout, clusterConfig.getMaxRedirects(), password, poolConfig);
         } else {
 
-            return new JedisCluster(nodes, cluster.getTimeout(), cluster.getClusterTimeout(), cluster.getClusterMaxAttempts(), jedisPool);
+            return new JedisCluster(hostAndPort, connectTimeout, clusterTimeout, clusterConfig.getMaxRedirects(), poolConfig);
         }
     }
 

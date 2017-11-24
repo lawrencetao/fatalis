@@ -122,13 +122,21 @@ public class TestController extends BaseController {
     /**
      * 测试redis和集群cluster
      *
-     * @param id
+     * @param request
      * @return JSONObject
      */
     @RequestMapping(value = "/redis", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiIgnore
-    public JSONObject redis(String id) {
+    public JSONObject redis(HttpServletRequest request) {
         TestObj to = new TestObj();
+
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        if (StringUtil.isNull(id)) {
+            id = StringUtil.getUUIDStr();
+
+            session.setAttribute("id", id);
+        }
         to.setId(id);
 
         if (fatalisProperties.getRedisClusterOpen()) {
@@ -268,6 +276,8 @@ public class TestController extends BaseController {
 
         return pubResponseJson(true, "Mq消息发送成功", to);
     }
+
+
 
     public static void main(String[] args) {
         try {
