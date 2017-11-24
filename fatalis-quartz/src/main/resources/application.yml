@@ -52,6 +52,13 @@ spring:
     url: jdbc:mysql://172.168.0.21:3306/tangram_v2?Unicode=true&characterEncoding=utf8&useSSL=false
     username: lima_user
     password: Mysql@1234
+  rabbitmq:
+      virtual-host: /
+      host: 127.0.0.1
+      port: 5672
+      username: lawrence
+      password: lawrence
+      publisher-confirms: true #设置消息回调
 
 
 
@@ -67,6 +74,13 @@ spring:
     url: jdbc:mysql://
     username:
     password:
+  rabbitmq:
+      virtual-host: /
+      host:
+      port: 5672
+      username:
+      password:
+      publisher-confirms: true #设置消息回调
 
 
 
@@ -82,3 +96,12 @@ spring:
     url: jdbc:mysql://
     username:
     password:
+  rabbitmq:
+      virtual-host: /
+      host:
+      port: 5672
+      username:
+      password:
+      publisher-confirms: true #设置消息回调
+
+

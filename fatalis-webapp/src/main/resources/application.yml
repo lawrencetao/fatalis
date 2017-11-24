@@ -13,7 +13,7 @@ fatalis:
   multi-datasource-open: false #多数据源读写分离开关, 读写service事务用@WriteDataSource, 只读service事务用@ReadDataSource
   swagger2-open: true #swagger2开关, true时可开启swagger2调试及创建文档
   uri-logging-open: true #日志打印uri访问开关, true时可打印所有访问uri地址
-  rabbitmq-open: true #rabbitmq模式, true(全模式), direct(仅direct模式), topic(仅topic模式), false(关闭)
+  rabbitmq-open: true #rabbitmq消息队列开关, 开启可实现topic模式的消息队列, 回调及持久化
 
 ### mybatis-plus配置
 mybatis-plus:
@@ -53,6 +53,7 @@ spring:
 spring:
   profiles: dev
   rabbitmq:
+    virtual-host: /
     host: 127.0.0.1
     port: 5672
     username: lawrence
@@ -97,11 +98,12 @@ fatalis:
 spring:
   profiles: test
   rabbitmq:
-      host:
-      port: 5672
-      username:
-      password:
-      publisher-confirms: true #设置消息回调
+    virtual-host: /
+    host:
+    port: 5672
+    username:
+    password:
+    publisher-confirms: true #设置消息回调
 
 ### redis, druid配置
 fatalis:
@@ -137,11 +139,12 @@ fatalis:
 spring:
   profiles: pro
   rabbitmq:
-      host:
-      port: 5672
-      username:
-      password:
-      publisher-confirms: true #设置消息回调
+    virtual-host: /
+    host:
+    port: 5672
+    username:
+    password:
+    publisher-confirms: true #设置消息回调
 
 ### redis, druid配置
 fatalis:

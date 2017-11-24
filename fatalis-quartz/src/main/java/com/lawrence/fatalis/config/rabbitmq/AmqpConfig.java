@@ -1,23 +1,18 @@
-package com.lawrence.fatalis.config.rabbitmq.topic;
+package com.lawrence.fatalis.config.rabbitmq;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * rabbitmq配置, topic模式
- */
 @Configuration
-@ConditionalOnExpression("'${fatalis.rabbitmq-open}' == 'topic' or '${fatalis.rabbitmq-open}' == 'true'")
-public class RabbitTopicConfig {
+public class AmqpConfig {
 
-    public static final String TOPIC_EXCHANGE = "exchange";
-    public static final String TOPIC_QUEUE_1 = "topicQueue1";
-    public static final String TOPIC_QUEUE_2 = "topicQueue2";
+    public static final String TOPIC_EXCHANGE = "topicExchange";
+    public static final String TOPIC_QUEUE1 = "topicQueue1";
+    public static final String TOPIC_QUEUE2 = "topicQueue2";
 
     /**
      * 队列topicQueue1配置
@@ -27,7 +22,7 @@ public class RabbitTopicConfig {
     @Bean
     public Queue topicQueue1() {
 
-        return new Queue(TOPIC_QUEUE_1);
+        return new Queue(TOPIC_QUEUE1);
     }
 
     /**
@@ -38,7 +33,7 @@ public class RabbitTopicConfig {
     @Bean
     public Queue topicQueue2() {
 
-        return new Queue(TOPIC_QUEUE_2);
+        return new Queue(TOPIC_QUEUE2);
     }
 
     /**

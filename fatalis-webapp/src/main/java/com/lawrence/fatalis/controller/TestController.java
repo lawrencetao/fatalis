@@ -8,8 +8,8 @@ import com.lawrence.fatalis.base.SpringContext;
 import com.lawrence.fatalis.config.FatalisProperties;
 import com.lawrence.fatalis.constant.ReloadConstant;
 import com.lawrence.fatalis.model.Commission;
-import com.lawrence.fatalis.rabbitmq.direct.RabbitDirectSender;
-import com.lawrence.fatalis.rabbitmq.topic.RabbitTopicSender;
+import com.lawrence.fatalis.rabbitmq.TopicSender1;
+import com.lawrence.fatalis.rabbitmq.TopicSender2;
 import com.lawrence.fatalis.redis.ClusterOperator;
 import com.lawrence.fatalis.redis.RedisOperator;
 import com.lawrence.fatalis.service.CommissionService;
@@ -258,25 +258,6 @@ public class TestController extends BaseController {
     }
 
     /**
-     * 测试rabbitmq的direct模式
-     *
-     * @param request
-     * @return JSONObject
-     */
-    @RequestMapping(value = "/mqdirect", method = {RequestMethod.GET, RequestMethod.POST})
-    @ApiIgnore
-    public JSONObject mqdirect(HttpServletRequest request, String id) {
-        RabbitDirectSender rabbitSender = (RabbitDirectSender) SpringContext.getBean("rabbitDirectSender");
-
-        TestObj to = new TestObj();
-        to.setId(id);
-        to.setList(new ArrayList<>());
-        rabbitSender.sendMessage(to);
-
-        return pubResponseJson(true, "Mq消息发送成功", to);
-    }
-
-    /**
      * 测试rabbitmq的topic模式
      *
      * @param request
@@ -285,7 +266,8 @@ public class TestController extends BaseController {
     @RequestMapping(value = "/mqtopic", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiIgnore
     public JSONObject mqtopic(HttpServletRequest request, String type) {
-        RabbitTopicSender rabbitSender = (RabbitTopicSender) SpringContext.getBean("rabbitTopicSender");
+        TopicSender1 sender1 = (TopicSender1) SpringContext.getBean("topicSender1");
+        TopicSender2 sender2 = (TopicSender2) SpringContext.getBean("topicSender2");
 
         if (StringUtil.isNull(type)) {
             type = "1";
@@ -295,17 +277,18 @@ public class TestController extends BaseController {
         switch (type) {
             case "1":
                 to.setId("testid");
-                rabbitSender.sendMessage1(to);
+                sender1.sendMessage1(to);
+                sender2.sendMessage1(to);
                 break;
             case "2":
                 to.setArray(new JSONArray());
-                rabbitSender.sendMessage2(to);
+                sender1.sendMessage2(to);
                 break;
             case "3":
                 Map<String, Object> map = new HashMap<>();
                 map.put("mq", "mqmap");
                 to.setMap(map);
-                rabbitSender.sendMessage3(to);
+                sender1.sendMessage3(to);
                 break;
             default:
                 break;

@@ -17,8 +17,7 @@ import java.util.Date;
 /**
  *  动态cron表达式Schedule定时任务
  */
-@Component
-@Configuration
+/*@Configuration*/
 @ConfigurationProperties(prefix = "schedule.dynamicTask")
 @Data
 public class DynamicScheduleTask implements SchedulingConfigurer {
