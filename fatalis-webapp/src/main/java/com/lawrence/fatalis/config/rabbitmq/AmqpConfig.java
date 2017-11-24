@@ -3,11 +3,13 @@ package com.lawrence.fatalis.config.rabbitmq;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
+@ConditionalOnExpression("${fatalis.rabbitmq-open}")
 public class AmqpConfig {
 
     public static final String TOPIC_EXCHANGE = "topicExchange";

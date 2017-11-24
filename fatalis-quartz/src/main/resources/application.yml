@@ -7,6 +7,9 @@ server:
   port: 90
   context-path: /fatalis-quartz
 
+fatalis:
+  rabbitmq-open: true #rabbitmq消息队列开关, 开启可实现topic模式的消息队列, 回调及持久化
+
 ### spring配置
 spring:
   profiles:

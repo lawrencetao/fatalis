@@ -5,10 +5,12 @@ import com.lawrence.fatalis.test.TestObj;
 import com.lawrence.fatalis.util.LogUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnExpression("${fatalis.rabbitmq-open}")
 @RabbitListener(queues = AmqpConfig.TOPIC_QUEUE2)
 public class TopicReceiver2 {
 

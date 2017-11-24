@@ -6,9 +6,11 @@ import com.lawrence.fatalis.util.LogUtil;
 import com.lawrence.fatalis.util.StringUtil;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnExpression("${fatalis.rabbitmq-open}")
 public class TopicSender1 implements RabbitTemplate.ConfirmCallback {
 
     private RabbitTemplate rabbitTemplate;
