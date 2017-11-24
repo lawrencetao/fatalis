@@ -4,7 +4,7 @@
 
 ### 项目配置(jar包部署时生效)
 server:
-  port: 8090
+  port: 90
   context-path: /fatalis-quartz
 
 ### spring配置
@@ -64,9 +64,9 @@ spring:
   profiles: test
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.31.110.142:3306/tangram?Unicode=true&characterEncoding=utf8&useSSL=false
-    username: admin
-    password: Admin@1234
+    url: jdbc:mysql://
+    username:
+    password:
 
 
 

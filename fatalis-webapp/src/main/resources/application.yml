@@ -109,15 +109,15 @@ fatalis:
     type: com.alibaba.druid.pool.DruidDataSource
     readSize: 1
     master: #druid读/写数据源
-      url: jdbc:mysql://172.31.110.142:3306/tangram?Unicode=true&characterEncoding=utf8&useSSL=false
-      username: admin
-      password: Admin@1234
+      url: jdbc:mysql://
+      username:
+      password:
     slave: #druid只读数据源
       - url: jdbc:mysql://
         username:
         password:
   redis:
-    host: 172.31.110.146
+    host:
     port: 6379
     password:
     cluster: #redis集群配置
@@ -158,7 +158,7 @@ fatalis:
         password:
   redis:
     host:
-    port:
+    port: 6379
     password:
     cluster: #redis集群配置
       nodes:
