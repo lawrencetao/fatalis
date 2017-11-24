@@ -2,7 +2,6 @@ package com.lawrence.fatalis.config.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.lawrence.fatalis.util.StringUtil;
-import com.lawrence.fatalis.util.rsa7des.AESCoder;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
@@ -26,14 +25,6 @@ public class DruidConfig {
         String password = druidProperties.getPassword();
 
         if (StringUtil.isNotNull(password)) {
-
-            // 配置文件中密码进行解密
-            /*try {
-                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-
             dataSource.setPassword(password);
         }
 

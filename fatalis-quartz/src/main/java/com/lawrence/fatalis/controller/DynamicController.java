@@ -3,7 +3,6 @@ package com.lawrence.fatalis.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lawrence.fatalis.base.SpringContext;
 import com.lawrence.fatalis.constant.ReloadConstant;
-import com.lawrence.fatalis.task.DynamicScheduleTask;
 import com.lawrence.fatalis.util.StringUtil;
 import com.lawrence.fatalis.util.rsa7des.AESCoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +38,7 @@ public class DynamicController {
                 try {
                     String decryptCron = AESCoder.decrypt(encryptCron, AESCoder.URLPARAM_KEY);
 
-                    Object obj = SpringContext.getBean(taskBeanName, DynamicScheduleTask.class);
+                    Object obj = SpringContext.getBean(taskBeanName);
                     Class clz = obj.getClass();
                     Method method = clz.getMethod("setCron", String.class);
                     method.invoke(obj, decryptCron);

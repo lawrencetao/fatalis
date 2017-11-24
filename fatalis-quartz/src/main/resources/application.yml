@@ -35,7 +35,7 @@ mybatis-plus:
 
 ### 定时任务配置
 schedule:
-  dynamicTask1:
+  dynamicTask:
     cron: 0/5 * * * * ?
 
 

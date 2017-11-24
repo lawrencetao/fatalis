@@ -19,7 +19,7 @@ import java.util.Date;
  */
 @Component
 @Configuration
-@ConfigurationProperties(prefix = "schedule.dynamicTask1")
+@ConfigurationProperties(prefix = "schedule.dynamicTask")
 @Data
 public class DynamicScheduleTask implements SchedulingConfigurer {
 
