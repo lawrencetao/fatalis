@@ -8,7 +8,8 @@ import com.lawrence.fatalis.base.SpringContext;
 import com.lawrence.fatalis.config.FatalisProperties;
 import com.lawrence.fatalis.constant.ReloadConstant;
 import com.lawrence.fatalis.model.Commission;
-import com.lawrence.fatalis.rabbitmq.RabbitSender;
+import com.lawrence.fatalis.rabbitmq.direct.RabbitDirectSender;
+import com.lawrence.fatalis.rabbitmq.topic.RabbitTopicSender;
 import com.lawrence.fatalis.redis.ClusterOperator;
 import com.lawrence.fatalis.redis.RedisOperator;
 import com.lawrence.fatalis.service.CommissionService;
@@ -27,9 +28,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/test")
@@ -259,20 +258,58 @@ public class TestController extends BaseController {
     }
 
     /**
-     * 测试rabbitmq
+     * 测试rabbitmq的direct模式
      *
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/mq", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/mqdirect", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiIgnore
-    public JSONObject mq(HttpServletRequest request, String id) {
+    public JSONObject mqdirect(HttpServletRequest request, String id) {
+        RabbitDirectSender rabbitSender = (RabbitDirectSender) SpringContext.getBean("rabbitDirectSender");
+
         TestObj to = new TestObj();
         to.setId(id);
         to.setList(new ArrayList<>());
-        to.setJson(JSON.parseObject("{\"mq\":\"mqtest\"}"));
-        RabbitSender rabbitSender = (RabbitSender) SpringContext.getBean("rabbitSender");
         rabbitSender.sendMessage(to);
+
+        return pubResponseJson(true, "Mq消息发送成功", to);
+    }
+
+    /**
+     * 测试rabbitmq的topic模式
+     *
+     * @param request
+     * @return JSONObject
+     */
+    @RequestMapping(value = "/mqtopic", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiIgnore
+    public JSONObject mqtopic(HttpServletRequest request, String type) {
+        RabbitTopicSender rabbitSender = (RabbitTopicSender) SpringContext.getBean("rabbitTopicSender");
+
+        if (StringUtil.isNull(type)) {
+            type = "1";
+        }
+
+        TestObj to = new TestObj();
+        switch (type) {
+            case "1":
+                to.setId("testid");
+                rabbitSender.sendMessage1(to);
+                break;
+            case "2":
+                to.setArray(new JSONArray());
+                rabbitSender.sendMessage2(to);
+                break;
+            case "3":
+                Map<String, Object> map = new HashMap<>();
+                map.put("mq", "mqmap");
+                to.setMap(map);
+                rabbitSender.sendMessage3(to);
+                break;
+            default:
+                break;
+        }
 
         return pubResponseJson(true, "Mq消息发送成功", to);
     }

@@ -17,6 +17,6 @@ public class FatalisProperties {
     @Value("${fatalis.uri-logging-open}")
     private Boolean uriLoggingOpen;
     @Value("${fatalis.rabbitmq-open}")
-    private Boolean rabbitmqOpen;
+    private String rabbitmqOpen;
 
 }
