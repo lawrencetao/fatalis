@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawrence.fatalis.config.redis.properties.RedisCluster;
 import com.lawrence.fatalis.config.redis.properties.RedisProperties;
 import com.lawrence.fatalis.util.StringUtil;
-import com.lawrence.fatalis.util.rsa7des.AESCoder;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -58,14 +57,6 @@ public class RedisConfig {
         String password = redisProperties.getPassword();
 
         if(StringUtil.isNotNull(password)){
-
-            // 配置文件中密码进行解密
-            /*try {
-                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-
             jedisConnectionFactory.setPassword(password);
         }
         jedisConnectionFactory.setPort(redisProperties.getPort());
@@ -171,16 +162,7 @@ public class RedisConfig {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(clusterConfig, poolConfig);
         String password = cluster.getPassword();
 
-        // 根据密码配置, 加载不同的jedisCluster构造
         if (StringUtil.isNotNull(password)) {
-
-            // 配置文件中密码进行解密
-            /*try {
-                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-
             jedisConnectionFactory.setPassword(password);
         }
         jedisConnectionFactory.setTimeout(cluster.getTimeout());
@@ -209,13 +191,6 @@ public class RedisConfig {
 
         // 根据密码配置, 加载不同的jedisCluster构造
         if (StringUtil.isNotNull(password)) {
-
-            // 配置文件中密码进行解密
-            /*try {
-                password = AESCoder.decrypt(password, AESCoder.CONFIG_KEY);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
 
             return new JedisCluster(hostAndPort, connectTimeout, clusterTimeout, clusterConfig.getMaxRedirects(), password, poolConfig);
         } else {
