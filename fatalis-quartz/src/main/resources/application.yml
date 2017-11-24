@@ -61,7 +61,6 @@ spring:
     port: 5672
     username: lawrence
     password: lawrence
-    publisher-confirms: true #设置消息回调
     listener:
       simple:
         default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
@@ -86,7 +85,6 @@ spring:
     port: 5672
     username:
     password:
-    publisher-confirms: true #设置消息回调
     listener:
       simple:
         default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
@@ -111,7 +109,6 @@ spring:
     port: 5672
     username:
     password:
-    publisher-confirms: true #设置消息回调
     listener:
       simple:
         default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
