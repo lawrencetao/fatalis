@@ -44,10 +44,7 @@ public class ReloadConstant extends PropertiesConfiguration {
      * @return PropertiesConfiguration
      */
     public static PropertiesConfiguration getAutoProper() {
-        Parameters params = new Parameters();
-        ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                new ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-                        .configure(params.fileBased().setFile(propertiesFile));
+        ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration> builder = getBuilder();
 
         PropertiesConfiguration proper = null;
         try {
@@ -65,10 +62,7 @@ public class ReloadConstant extends PropertiesConfiguration {
      * @return PropertiesConfiguration
      */
     public static PropertiesConfiguration getAutoOriProper() {
-        Parameters params = new Parameters();
-        ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                new ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-                        .configure(params.fileBased().setFile(propertiesFile));
+        ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration> builder = getBuilder();
 
         PropertiesConfiguration proper = null;
         try {
@@ -78,6 +72,16 @@ public class ReloadConstant extends PropertiesConfiguration {
         }
 
         return proper;
+    }
+
+    /* 构造builder */
+    private static ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration> getBuilder() {
+        Parameters params = new Parameters();
+        ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration> builder =
+                new ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
+                        .configure(params.fileBased().setFile(propertiesFile));
+
+        return builder;
     }
 
     /**
