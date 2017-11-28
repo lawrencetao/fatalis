@@ -14,14 +14,9 @@ import com.lawrence.fatalis.redis.ClusterOperator;
 import com.lawrence.fatalis.redis.RedisOperator;
 import com.lawrence.fatalis.service.CommissionService;
 import com.lawrence.fatalis.test.TestObj;
-import com.lawrence.fatalis.util.DateUtil;
-import com.lawrence.fatalis.util.LogUtil;
-import com.lawrence.fatalis.util.StringUtil;
-import com.lawrence.fatalis.util.rsa7des.AESCoder;
+import com.lawrence.fatalis.util.*;
 import io.swagger.annotations.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
@@ -297,16 +292,48 @@ public class TestController extends BaseController {
         return pubResponseJson(true, "Mq消息发送成功", to);
     }
 
+    /**
+     * 测试restful请求工具类
+     *
+     * @param request
+     * @return JSONObject
+     */
+    @RequestMapping(value = "/http/{veriable}", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiIgnore
+    public JSONObject test(HttpServletRequest request, @PathVariable String veriable, @RequestBody JSONObject input) {
+        String header = request.getHeader("header");
+        String uriparam = request.getParameter("uriparam");
+        String param = request.getParameter("param");
 
+        JSONObject json = new JSONObject();
+        json.put("header", header);
+        json.put("param", param);
+        json.put("veriable", veriable);
+        json.put("urip", uriparam);
+        json.put("str", input);
+
+        return json;
+    }
 
     public static void main(String[] args) {
-        try {
+        /*try {
             String cron = "0/10 * * * * ?";
             System.out.println(cron = AESCoder.encrypt(cron, AESCoder.URLPARAM_KEY));
             System.out.println(AESCoder.decrypt(cron, AESCoder.URLPARAM_KEY));
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+
+        Map<String, String> ver = new HashMap<>();
+        ver.put("veriable", "veriableParam");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("header", "requestHeader");
+        JSONObject param = new JSONObject();
+        param.put("name", "lawrence");
+        String res = RestHttpUtil.INSTANCE.restPost("http://localhost/fatalis-webapp/test/http/{veriable}?uriparam=uriParam",
+                ver, headers, param, "application/json;charset=UTF-8");
+        System.out.println(res);
+
     }
 
 }
