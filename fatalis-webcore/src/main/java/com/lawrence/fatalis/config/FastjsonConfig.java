@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * fastjson配置类
  */
-@Configuration("fastjsonConfig")
+@Configuration
 @ConditionalOnClass(value = {com.alibaba.fastjson.JSON.class, com.alibaba.fastjson.JSONObject.class})
 @ConditionalOnMissingBean(FastJsonHttpMessageConverter4.class)
 @ConditionalOnWebApplication
@@ -74,11 +74,6 @@ public class FastjsonConfig {
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         mediaTypes.add(MediaType.APPLICATION_JSON);
         mediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
-        mediaTypes.add(MediaType.APPLICATION_XHTML_XML);
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        mediaTypes.add(MediaType.TEXT_HTML);
-        mediaTypes.add(MediaType.TEXT_PLAIN);
-        mediaTypes.add(MediaType.TEXT_XML);
 
         return mediaTypes;
     }
