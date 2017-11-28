@@ -1,6 +1,5 @@
-package com.lawrence.fatalis.util.rsa7des;
+package com.lawrence.fatalis.util.encrypt;
 
-import com.lawrence.fatalis.util.StringUtil;
 import org.apache.commons.codec.binary.Base64;
 
 import java.util.Map;

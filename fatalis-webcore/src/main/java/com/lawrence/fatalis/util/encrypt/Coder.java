@@ -1,4 +1,4 @@
-package com.lawrence.fatalis.util.rsa7des;
+package com.lawrence.fatalis.util.encrypt;
 
 
 

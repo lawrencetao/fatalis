@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawrence.fatalis.base.SpringContext;
 import com.lawrence.fatalis.constant.ReloadConstant;
 import com.lawrence.fatalis.util.StringUtil;
-import com.lawrence.fatalis.util.rsa7des.AESCoder;
+import com.lawrence.fatalis.util.encrypt.AESCoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

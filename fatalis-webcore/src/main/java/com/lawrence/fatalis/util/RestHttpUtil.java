@@ -63,7 +63,7 @@ public enum RestHttpUtil {
         checkURI(uri);
 
         // 设置requestHeaders
-        HttpHeaders httpHeaders = new HttpHeaders();;
+        HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Content-type", StringUtil.isNull(contentType) ? "application/x-www-form-urlencoded;charset=UTF-8" : contentType);
         if (headers != null && headers.size() > 0) {
             Set<Map.Entry<String, String>> set = headers.entrySet();
