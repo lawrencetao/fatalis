@@ -82,12 +82,6 @@
             <artifactId>mybatis-plus</artifactId>
         </dependency>
 
-        <!-- jedis-cluster依赖 -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-        </dependency>
-
         <!-- lombok依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
