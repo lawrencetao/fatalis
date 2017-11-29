@@ -315,6 +315,29 @@ public class TestController extends BaseController {
         return json;
     }
 
+    /**
+     * 测试cxf调用quartz项目中的webservice服务接口
+     *
+     * @param request
+     * @return JSONObject
+     */
+    @RequestMapping(value = "/cxf", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiIgnore
+    public JSONObject test(HttpServletRequest request) {
+        long l1 = System.nanoTime();
+
+        String res = WebServiceUtil.cxfWebService("http://localhost:90/fatalis-quartz/services/QuartzService?wsdl",
+                "getConfig", null, "webserviceParam", "enableUpdate");
+
+        long l2 = System.nanoTime();
+        System.out.println(l2 - l1);
+
+        JSONObject json = new JSONObject();
+        json.put("res", res);
+
+        return json;
+    }
+
     public static void main(String[] args) {
         /*try {
             String cron = "0/10 * * * * ?";
