@@ -69,6 +69,8 @@
         <cxf.version>3.2.1</cxf.version>
         <fastinfoset.version>1.2.13</fastinfoset.version>
 
+        <shiro.version>1.4.0</shiro.version>
+
     </properties>
 
     <dependencyManagement>
@@ -213,6 +215,13 @@
                 <version>${fastinfoset.version}</version>
             </dependency>
 
+            <!-- shiro依赖 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -222,7 +231,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.6.2</version>
 
                     <!-- maven编译采用的java版本 -->
                     <configuration>
