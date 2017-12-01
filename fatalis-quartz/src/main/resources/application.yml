@@ -14,11 +14,6 @@ fatalis:
 spring:
   profiles:
     active: dev #当前启用的profiles
-  devtools:
-    restart:
-      enabled: false #开发者工具
-      additional-paths: src/main/java
-      exclude: static/**, templates/**
   jmx:
     default-domain: fatalis-quartz
 
@@ -52,7 +47,7 @@ spring:
   profiles: dev
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.168.0.21:3306/tangram_v2?Unicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://172.168.0.21:3306/fatalis?Unicode=true&characterEncoding=utf8&useSSL=false
     username: lima_user
     password: Mysql@1234
   rabbitmq:
