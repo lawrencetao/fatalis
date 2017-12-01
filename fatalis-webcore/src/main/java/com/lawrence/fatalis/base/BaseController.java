@@ -15,13 +15,17 @@ public class BaseController {
     /**
      * 通用组装json, 返回页面
      *
-     * @param success, message, data
+     * @param code, message, data
      * @return JSONObject
      */
-    public JSONObject pubResponseJson(boolean success, String message, Object data) {
+    public JSONObject pubResponseJson(String code, String message, Object data) {
+        if (StringUtil.isNull(code)) {
+            throw new RuntimeException("返回状态码不能为空");
+        }
+
         JSONObject json = new JSONObject();
 
-        json.put("success", success);
+        json.put("success", code);
         json.put("message", message == null ? "" : message);
 
         // 格式化json, null值不输出

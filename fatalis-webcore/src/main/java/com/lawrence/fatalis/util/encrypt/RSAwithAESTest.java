@@ -46,6 +46,10 @@ public class RSAwithAESTest {
         String str = "Mysql@1234";
         System.out.println(AESCoder.encrypt(str, AESCoder.CONFIG_KEY));
 
+        String code = MD5Coder.generate("lawrence", "lawrence");
+        System.out.println(code);
+        System.out.println(MD5Coder.verify("lawrence", code, "lawrence"));
+
     }
 }
 
