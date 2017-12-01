@@ -7,6 +7,7 @@ import com.lawrence.fatalis.base.BaseController;
 import com.lawrence.fatalis.base.SpringContext;
 import com.lawrence.fatalis.config.FatalisProperties;
 import com.lawrence.fatalis.constant.ReloadConstant;
+import com.lawrence.fatalis.constant.WebContant;
 import com.lawrence.fatalis.model.Commission;
 import com.lawrence.fatalis.rabbitmq.TopicSender1;
 import com.lawrence.fatalis.rabbitmq.TopicSender2;
@@ -36,7 +37,7 @@ public class TestController extends BaseController {
      * 测试修改配置自动加载
      */
     @ApiOperation(value = "测试修改配置自动加载", notes = "测试修改配置自动加载")
-    @RequestMapping(value = "/config", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
 
         long l1 = System.nanoTime();
@@ -46,9 +47,9 @@ public class TestController extends BaseController {
         String conf2 = "";
         String conf3 = "";
         try {
-            conf = ReloadConstant.getAutoProper().getString("contextUrl");
+            conf = ReloadConstant.getAutoProper().getString("contextUri");
             conf1 = ReloadConstant.getAutoOriProper().getString("spring.jndi.ignore");
-            conf2 = ReloadConstant.getFixedProper().getString("contextUrl");
+            conf2 = ReloadConstant.getFixedProper().getString("contextUri");
             conf3 = ReloadConstant.getFixedOriProper().getString("spring.jndi.ignore");
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +79,7 @@ public class TestController extends BaseController {
     @ApiResponses({
             @ApiResponse(code = 404, message = "请求地址错误")
     })
-    @RequestMapping(value = "/json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/json")
     public JSONObject json(HttpServletRequest request, String id) {
         TestObj to = new TestObj();
         to.setId(id);
@@ -87,14 +88,14 @@ public class TestController extends BaseController {
 
         LogUtil.info(getClass(), JSON.toJSONString(to));
 
-        return pubResponseJson(true, "成功", to);
+        return pubResponseJson(WebContant.SUCCESS, "成功", to);
     }
 
     /**
      * 测试StringUtil和DateUtil
      */
     @ApiOperation(value = "测试StringUtil和DateUtil", notes = "测试StringUtil和DateUtil")
-    @RequestMapping(value = "/dateStr", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/dateStr")
     public JSONObject dateStr(HttpServletRequest request, HttpServletResponse response) {
         JSONObject json = new JSONObject();
         Date date = new Date();
@@ -119,7 +120,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/redis", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/redis")
     @ApiIgnore
     public JSONObject redis(HttpServletRequest request) {
         TestObj to = new TestObj();
@@ -158,7 +159,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/add", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/add")
     @ApiIgnore
     public JSONObject add(HttpServletRequest request) {
         String sid = request.getParameter("sid");
@@ -188,7 +189,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/query", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/query")
     @ApiIgnore
     public JSONObject query(HttpServletRequest request) {
         String sid = request.getParameter("sid");
@@ -209,7 +210,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/get")
     @ApiIgnore
     public JSONObject get(HttpServletRequest request) {
         String sid = request.getParameter("sid");
@@ -234,7 +235,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/session", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/session")
     @ApiIgnore
     public JSONObject session(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -258,7 +259,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/mqtopic", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/mqtopic")
     @ApiIgnore
     public JSONObject mqtopic(HttpServletRequest request, String type) {
         TopicSender1 sender1 = (TopicSender1) SpringContext.getBean("topicSender1");
@@ -289,7 +290,7 @@ public class TestController extends BaseController {
                 break;
         }
 
-        return pubResponseJson(true, "Mq消息发送成功", to);
+        return pubResponseJson(WebContant.SUCCESS, "Mq消息发送成功", to);
     }
 
     /**
@@ -298,7 +299,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/http/{veriable}", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/http/{veriable}")
     @ApiIgnore
     public JSONObject test(HttpServletRequest request, @PathVariable String veriable, @RequestBody JSONObject input) {
         String header = request.getHeader("header");
@@ -321,7 +322,7 @@ public class TestController extends BaseController {
      * @param request
      * @return JSONObject
      */
-    @RequestMapping(value = "/cxf", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/cxf")
     @ApiIgnore
     public JSONObject test(HttpServletRequest request) {
         long l1 = System.nanoTime();

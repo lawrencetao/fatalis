@@ -159,8 +159,9 @@ public class RedisOperator {
      *
      * @param key
      */
-    public <T> void leftPushList(String key, T t) {
-        redisTemplate.opsForList().leftPush(prefix2Key(key), t);
+    public <T> long leftPushList(String key, T t) {
+
+        return redisTemplate.opsForList().leftPush(prefix2Key(key), t);
     }
 
     /**

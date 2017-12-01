@@ -153,12 +153,35 @@ public class ClusterOperator {
     }
 
     /**
+     * 将字符串存入list, leftPush
+     *
+     * @param key
+     */
+    public long leftPushList(String key, String value) {
+
+        return jedisCluster.lpush(prefix2Key(key), value);
+    }
+
+    /**
      * 将对象存入list, leftPush
      *
      * @param key
      */
-    public <T> void leftPushList(String key, T t) {
-        jedisCluster.lpush(prefix2Key(key), JSON.toJSONString(t));
+    public <T> long leftPushList(String key, T t) {
+
+        return jedisCluster.lpush(prefix2Key(key), JSON.toJSONString(t));
+    }
+
+    /**
+     * 将字符串从list取出, rightPop
+     *
+     * @param key
+     * @return T
+     */
+    @SuppressWarnings("unchecked")
+    public String rightPopList(String key) {
+
+        return jedisCluster.rpop(prefix2Key(key));
     }
 
     /**

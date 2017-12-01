@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawrence.fatalis.dao.FataAuthorityDao">
+  <resultMap id="BaseResultMap" type="com.lawrence.fatalis.model.FataAuthority">
+    <id column="authority_id" jdbcType="VARCHAR" property="authorityId" />
+    <result column="authority_name" jdbcType="VARCHAR" property="authorityName" />
+    <result column="main_url" jdbcType="VARCHAR" property="mainUrl" />
+    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.lawrence.fatalis.model.FataAuthority">
+    <result column="branch_url" jdbcType="LONGVARCHAR" property="branchUrl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    authority_id, authority_name, main_url, permission, sort, create_time, update_time, 
+    status
+  </sql>
+  <sql id="Blob_Column_List">
+    branch_url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from fata_authority
+    where authority_id = #{authorityId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from fata_authority
+    where authority_id = #{authorityId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lawrence.fatalis.model.FataAuthority">
+    insert into fata_authority (authority_id, authority_name, main_url, 
+      permission, sort, create_time, 
+      update_time, status, branch_url
+      )
+    values (#{authorityId,jdbcType=VARCHAR}, #{authorityName,jdbcType=VARCHAR}, #{mainUrl,jdbcType=VARCHAR}, 
+      #{permission,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{branchUrl,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lawrence.fatalis.model.FataAuthority">
+    insert into fata_authority
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="authorityName != null">
+        authority_name,
+      </if>
+      <if test="mainUrl != null">
+        main_url,
+      </if>
+      <if test="permission != null">
+        permission,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="branchUrl != null">
+        branch_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=VARCHAR},
+      </if>
+      <if test="authorityName != null">
+        #{authorityName,jdbcType=VARCHAR},
+      </if>
+      <if test="mainUrl != null">
+        #{mainUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null">
+        #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="branchUrl != null">
+        #{branchUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lawrence.fatalis.model.FataAuthority">
+    update fata_authority
+    <set>
+      <if test="authorityName != null">
+        authority_name = #{authorityName,jdbcType=VARCHAR},
+      </if>
+      <if test="mainUrl != null">
+        main_url = #{mainUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null">
+        permission = #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="branchUrl != null">
+        branch_url = #{branchUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where authority_id = #{authorityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lawrence.fatalis.model.FataAuthority">
+    update fata_authority
+    set authority_name = #{authorityName,jdbcType=VARCHAR},
+      main_url = #{mainUrl,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      branch_url = #{branchUrl,jdbcType=LONGVARCHAR}
+    where authority_id = #{authorityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lawrence.fatalis.model.FataAuthority">
+    update fata_authority
+    set authority_name = #{authorityName,jdbcType=VARCHAR},
+      main_url = #{mainUrl,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where authority_id = #{authorityId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryAuthByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select a.authority_id, a.authority_name, a.main_url, a.branch_url, a.permission, a.sort,
+      a.create_time, a.update_time from fata_user u
+      inner join user_role ur
+      on u.user_id = ur.user_id and u.status = ur.status
+      inner join fata_role r
+      on ur.role_id = r.role_id  and ur.status = r.status
+      inner join role_authority ra
+      on r.role_id = ra.role_id  and r.status = ra.status
+      inner join fata_authority a
+      on ra.authority_id = a.authority_id  and ra.status = a.status
+
+      where u.user_id = #{userId} and a.status = '1';
+  </select>
+
+  <select id="queryAllAuth" resultMap="BaseResultMap">
+    select * from fata_authority where status = '1';
+  </select>
+
+</mapper>

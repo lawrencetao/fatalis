@@ -12,7 +12,7 @@
 
         <!-- 数据库链接地址账号密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://120.92.82.51:3306/tangram_v2?Unicode=true&amp;characterEncoding=utf8&amp;useSSL=false"
+                        connectionURL="jdbc:mysql://172.168.0.21:3306/fatalis?Unicode=true&amp;characterEncoding=utf8&amp;useSSL=false"
                         userId="lima_user"
                         password="Mysql@1234"/>
 
@@ -38,7 +38,15 @@
         </javaClientGenerator>
 
         <!-- 生成对应表及类名 -->
-        <table tableName="org_user" domainObjectName="OrgUser" enableCountByExample="false" enableUpdateByExample="false"
+        <table tableName="fata_user" domainObjectName="FataUser" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="user_role" domainObjectName="UserRole" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="fata_role" domainObjectName="FataRole" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="role_authority" domainObjectName="RoleAuthority" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="fata_authority" domainObjectName="FataAuthority" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 
     </context>

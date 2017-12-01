@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=5.0">
+<title>Shiro测试页</title>
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<script src="../../static/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="../../static/js/common.js" type="text/javascript"></script>
+</head>
+<body>
+	<div>Shiro测试页</div>
+
+	<input type="button" value="登陆" id="login" />
+	<input type="button" value="退出" id="logout" />
+	<input type="button" value="busi1" id="busi1" />
+	<input type="button" value="busi2" id="busi2" />
+	<input type="button" value="busi3" id="busi3" />
+	<input type="button" value="redis" id="redis" />
+
+<script  type="text/javascript">
+	$(function() {
+
+	});
+
+	$('#login').click(function() {
+        ajax('http://localhost/fatalis-webapp/business/login?username=18888000088&password=lawrence&rememberMe=true')
+	});
+    $('#logout').click(function() {
+        ajax('http://localhost/fatalis-webapp/business/logout')
+    });
+
+    $('#busi1').click(function() {
+        ajax('http://localhost/fatalis-webapp/business/dobusi1')
+    });
+    $('#busi2').click(function() {
+        ajax('http://localhost/fatalis-webapp/business/dobusi2')
+    });
+    $('#busi3').click(function() {
+        ajax('http://localhost/fatalis-webapp/business/dobusi3')
+    });
+
+    $('#redis').click(function() {
+        ajax('http://localhost/fatalis-webapp/test/redis')
+    });
+
+	function ajax(uri) {
+        $.ajax({
+            url: uri,
+            type: 'post',
+            dataType: 'json',
+			data: {
+
+			},
+            success: function (data) {
+                alert("成功: " + JSON.stringify(data));
+            }
+        });
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawrence.fatalis.dao.RoleAuthorityDao">
+  <resultMap id="BaseResultMap" type="com.lawrence.fatalis.model.RoleAuthority">
+    <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <id column="authority_id" jdbcType="VARCHAR" property="authorityId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, authority_id, create_time, update_time, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.lawrence.fatalis.model.RoleAuthority" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from role_authority
+    where role_id = #{roleId,jdbcType=VARCHAR}
+      and authority_id = #{authorityId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.lawrence.fatalis.model.RoleAuthority">
+    delete from role_authority
+    where role_id = #{roleId,jdbcType=VARCHAR}
+      and authority_id = #{authorityId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lawrence.fatalis.model.RoleAuthority">
+    insert into role_authority (role_id, authority_id, create_time, 
+      update_time, status)
+    values (#{roleId,jdbcType=VARCHAR}, #{authorityId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lawrence.fatalis.model.RoleAuthority">
+    insert into role_authority
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lawrence.fatalis.model.RoleAuthority">
+    update role_authority
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=VARCHAR}
+      and authority_id = #{authorityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lawrence.fatalis.model.RoleAuthority">
+    update role_authority
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where role_id = #{roleId,jdbcType=VARCHAR}
+      and authority_id = #{authorityId,jdbcType=VARCHAR}
+  </update>
+</mapper>

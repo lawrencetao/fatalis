@@ -25,7 +25,9 @@ import java.lang.reflect.Method;
 @ConditionalOnProperty(prefix = "fatalis", name = "multi-datasource-open", havingValue = "true")
 public class DataSourceAop implements PriorityOrdered {
 
-    // 有读写注解的service方法, 判断并切换数据源
+    /**
+     * 有读写注解的service方法, 判断并切换数据源
+     */
     @Pointcut(value = "execution(* com.lawrence.fatalis.service.impl..*.*(..)) && " +
             "(@annotation(com.lawrence.fatalis.annotation.WriteDataSource) || " +
             "@annotation(com.lawrence.fatalis.annotation.ReadDataSource))")
@@ -87,7 +89,6 @@ public class DataSourceAop implements PriorityOrdered {
     @Override
     public int getOrder() {
 
-        // 在启动类中加上了@EnableTransactionManagement(order = 10)
         return 1;
     }
 
