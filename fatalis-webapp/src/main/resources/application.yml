@@ -52,7 +52,7 @@ spring:
     host: 127.0.0.1
     port: 5672
     username: lawrence
-    password: lawrence
+    password: Tao@rabbit
     publisher-confirms: true #设置消息回调
 
 ### redis, druid配置
@@ -61,9 +61,9 @@ fatalis:
     type: com.alibaba.druid.pool.DruidDataSource
     readSize: 1
     master: #druid读/写数据源
-      url: jdbc:mysql://172.168.0.21:3306/fatalis?Unicode=true&characterEncoding=utf8&useSSL=false
-      username: lima_user
-      password: Mysql@1234
+      url: jdbc:mysql://127.0.0.1:3306/fatalis?Unicode=true&characterEncoding=utf8&useSSL=false
+      username: lawrence
+      password: Tao@3809
     slave: #druid只读数据源
       - url: jdbc:mysql://
         username:
@@ -71,7 +71,7 @@ fatalis:
   redis:
     host: 127.0.0.1
     port: 6379
-    password: lawrence
+    password: Tao@1026
     cluster: #redis集群配置
       nodes:
         - 127.0.0.1:7000
@@ -80,7 +80,7 @@ fatalis:
         - 127.0.0.1:7003
         - 127.0.0.1:7004
         - 127.0.0.1:7005
-      password: lawrence
+      password: Tao@1026
 
 
 

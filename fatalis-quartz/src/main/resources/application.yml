@@ -47,15 +47,15 @@ spring:
   profiles: dev
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.168.0.21:3306/fatalis?Unicode=true&characterEncoding=utf8&useSSL=false
-    username: lima_user
-    password: Mysql@1234
+    url: jdbc:mysql://127.0.0.1:3306/fatalis?Unicode=true&characterEncoding=utf8&useSSL=false
+    username: lawrence
+    password: Tao@3809
   rabbitmq:
     virtual-host: /
     host: 127.0.0.1
     port: 5672
     username: lawrence
-    password: lawrence
+    password: Tao@rabbit
     listener:
       simple:
         default-requeue-rejected: true #监听异常的消息是否重新加入队列, 建议为true
