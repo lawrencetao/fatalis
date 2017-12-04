@@ -7,6 +7,8 @@ public class WebContant extends BaseConstant {
 
     /** 当前登陆用户shiro-session-key */
     public static final String SHIRO_SESSION_USER = "fatalis-webapp.shiro.currentUser";
+    /** 当前登陆用户的角色和权限key */
+    public static final String SHIRO_ROLE_AUTH = "fatalis-webapp.role.auth";
 
     /** 数据有效标志状态 */
     public static final String STATUS_ON = "1";

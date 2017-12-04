@@ -1,6 +1,7 @@
 package com.lawrence.fatalis.config.shiro;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lawrence.fatalis.constant.WebContant;
 import com.lawrence.fatalis.model.FataAuthority;
 import com.lawrence.fatalis.model.FataRole;
 import com.lawrence.fatalis.model.FataUser;
@@ -123,39 +124,49 @@ public class MyShiroRealm extends AuthorizingRealm {
      * @param principals
      * @return AuthenticationInfo
      */
+    @SuppressWarnings("unchecked")
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         FataUser user = (FataUser) SecurityUtils.getSubject().getPrincipal();
         String userId = user.getUserId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        // 根据userId查询角色, 放入AuthorizationInfo
-        Map<String, Object> map = new HashMap<String, Object>();
-		map.put("user_id", userId);
-		List<FataRole> roleList = roleService.queryRoleList(userId);
-		Set<String> roleSet = new HashSet<>();
-		for(FataRole role : roleList){
-			roleSet.add(role.getRoleCode());
+        List<Set<String>> roleAuthList = (List<Set<String>>) SecurityUtils.getSubject().getSession().getAttribute(WebContant.SHIRO_ROLE_AUTH);
+        if (roleAuthList != null && roleAuthList.size() == 2) {
+            info.setRoles(roleAuthList.get(0));// 缓存角色
+            info.setStringPermissions(roleAuthList.get(1));// 缓存权限
+        } else {
 
-            LogUtil.info(getClass(), "用户: " + user.getUserName() + ", 角色: " + role.getRoleCode());
-		}
-        info.setRoles(roleSet);
+            // 根据userId查询角色, 放入AuthorizationInfo
+            Map<String, Object> map = new HashMap<>();
+            map.put("user_id", userId);
+            List<FataRole> roleList = roleService.queryRoleList(userId);
+            Set<String> roleSet = new HashSet<>();
+            for(FataRole role : roleList){
+                roleSet.add(role.getRoleCode());
 
-        // 根据userId查询权限, 放入AuthorizationInfo
-		List<FataAuthority> authList = authService.queryAuthList(userId);
-		Set<String> authSet = new HashSet<String>();
-		for(FataAuthority auth : authList){
-		    String branchUrl = auth.getBranchUrl();
-		    JSONObject json = JSONObject.parseObject(branchUrl);
-		    Set<Map.Entry<String, Object>> set = json.entrySet();
-            for (Map.Entry entry : set) {
-                authSet.add(auth.getMainUrl() + entry.getKey());
-
-                LogUtil.info(getClass(), "用户: " + user.getUserName() + ", 权限: " + auth.getMainUrl() + entry.getKey());
+                LogUtil.info(getClass(), "用户: " + user.getUserName() + ", 角色: " + role.getRoleCode());
             }
-        }
+            info.setRoles(roleSet);
 
-        info.setStringPermissions(authSet);
+            // 根据userId查询权限, 放入AuthorizationInfo
+            List<FataAuthority> authList = authService.queryAuthList(userId);
+            Set<String> authSet = new HashSet<>();
+            for(FataAuthority auth : authList){
+                String branchUrl = auth.getBranchUrl();
+                JSONObject json = JSONObject.parseObject(branchUrl);
+                Set<Map.Entry<String, Object>> set = json.entrySet();
+                for (Map.Entry entry : set) {
+                    authSet.add(auth.getMainUrl() + entry.getKey());
+
+                    LogUtil.info(getClass(), "用户: " + user.getUserName() + ", 权限: " + auth.getMainUrl() + entry.getKey());
+                }
+            }
+
+            info.setStringPermissions(authSet);
+
+            SecurityUtils.getSubject().getSession().setAttribute(WebContant.SHIRO_ROLE_AUTH, new ArrayList<Set<String>>(Arrays.asList(roleSet, authSet)));
+        }
 
         return info;
     }
