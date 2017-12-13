@@ -46,15 +46,14 @@ public enum RestHttpUtil {
         fastJsonHttpMessageConverter4.setSupportedMediaTypes(mediaTypes);
 
         messageConverters.add(fastJsonHttpMessageConverter4);
-        RestTemplate restTemplate = new RestTemplate(messageConverters);
 
-        return restTemplate;
+        return new RestTemplate(messageConverters);
     }
 
     /**
      * 发送post请求
      *
-     * @param uri, headers, param
+     * @param uri, param, contentType
      * @return String
      */
     public String restPost(String uri, Object param, String contentType) {
@@ -66,7 +65,7 @@ public enum RestHttpUtil {
     /**
      * 发送post请求, uri参数可变
      *
-     * @param uri, headers, param
+     * @param uri, uriVeriables, param, contentType
      * @return String
      */
     public String restPost(String uri, Map<String, String> uriVeriables, Object param, String contentType) {
@@ -125,6 +124,7 @@ public enum RestHttpUtil {
     /**
      * 发送get请求
      *
+     * @param uri
      * @return String
      */
     public String restGet(String uri) {
@@ -136,6 +136,7 @@ public enum RestHttpUtil {
     /**
      * 发送get请求, uri参数可变
      *
+     * @param uri, uriVeriables
      * @return String
      */
     public String restGet(String uri, Map<String, String> uriVeriables) {
@@ -147,6 +148,7 @@ public enum RestHttpUtil {
     /**
      * 发送get请求, uri参数可变, 带请求头
      *
+     * @param uri, uriVeriables, headers
      * @return String
      */
     public ResponseEntity<String> restGet(String uri, Map<String, String> uriVeriables, Map<String, String> headers) {
