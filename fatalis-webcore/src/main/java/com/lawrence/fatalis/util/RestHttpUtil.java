@@ -41,7 +41,8 @@ public enum RestHttpUtil {
 
         // 设置mediaTypes
         ArrayList<MediaType> mediaTypes = new ArrayList<>(Arrays.asList(MediaType.APPLICATION_JSON_UTF8,
-                MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_XHTML_XML));
+                MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_XHTML_XML, MediaType.TEXT_HTML,
+                MediaType.TEXT_PLAIN, MediaType.TEXT_XML));
         fastJsonHttpMessageConverter4.setSupportedMediaTypes(mediaTypes);
 
         messageConverters.add(fastJsonHttpMessageConverter4);
@@ -53,18 +54,42 @@ public enum RestHttpUtil {
     /**
      * 发送post请求
      *
-     * @param uri, veriable(uri参数中{}变量替换成对应key的value), headers, param, contentType
+     * @param uri, headers, param
      * @return String
      */
+    public String restPost(String uri, Object param, String contentType) {
+        ResponseEntity<String> responseEntity = restPost(uri, null, null, param, contentType);
+
+        return responseEntity == null ? "" : responseEntity.getBody();
+    }
+
+    /**
+     * 发送post请求, uri参数可变
+     *
+     * @param uri, headers, param
+     * @return String
+     */
+    public String restPost(String uri, Map<String, String> uriVeriables, Object param, String contentType) {
+        ResponseEntity<String> responseEntity = restPost(uri, uriVeriables, null, param, contentType);
+
+        return responseEntity == null ? "" : responseEntity.getBody();
+    }
+
+    /**
+     * 发送post请求, uri参数可变, 带请求头
+     *
+     * @param uri, veriable(uri参数中{}变量替换成对应key的value), headers, param, contentType
+     * @return ResponseEntity<String>
+     */
     @SuppressWarnings("unchecked")
-    public String restPost(String uri, Map<String, String> uriVeriables, Map<String, String> headers, Object param, String contentType) {
+    public ResponseEntity<String> restPost(String uri, Map<String, String> uriVeriables, Map<String, String> headers, Object param, String contentType) {
 
         // 校验uri非空
         checkURI(uri);
 
         // 设置requestHeaders
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Content-type", StringUtil.isNull(contentType) ? "application/x-www-form-urlencoded;charset=UTF-8" : contentType);
+        httpHeaders.set("Content-type", StringUtil.isNull(contentType) ? "application/x-www-form-urlencoded" : contentType);
         if (headers != null && headers.size() > 0) {
             Set<Map.Entry<String, String>> set = headers.entrySet();
             for (Map.Entry<String, String> entry : set) {
@@ -85,16 +110,16 @@ public enum RestHttpUtil {
         }
 
         RestTemplate temp = getRestTemplate();
-        String res;
+        ResponseEntity<String> responseEntity;
 
         // uriVeriables不为空时, 替换uri中的参数
         if (uriVeriables != null && uriVeriables.size() > 0) {
-            res = temp.postForObject(uri, httpEntity, String.class, uriVeriables);
+            responseEntity = temp.exchange(uri, HttpMethod.POST, httpEntity, String.class, uriVeriables);
         } else {
-            res = temp.postForObject(uri, httpEntity, String.class);
+            responseEntity = temp.exchange(uri, HttpMethod.POST, httpEntity, String.class);
         }
 
-        return res;
+        return responseEntity;
     }
 
     /**
@@ -102,37 +127,35 @@ public enum RestHttpUtil {
      *
      * @return String
      */
-    public String restGet(String uri, Map<String, String> uriVeriables) {
+    public String restGet(String uri) {
+        ResponseEntity<String> responseEntity = restGet(uri, null, null);
 
-        // 校验uri非空
-        checkURI(uri);
-
-        RestTemplate temp = getRestTemplate();
-        String res;
-
-        // uriVeriables不为空时, 替换uri中的参数
-        if (uriVeriables != null && uriVeriables.size() > 0) {
-            res = temp.getForObject(uri, String.class, uriVeriables);
-        } else {
-            res = temp.getForObject(uri, String.class);
-        }
-
-        return res;
+        return responseEntity == null ? "" : responseEntity.getBody();
     }
 
     /**
-     * 发送get请求, 带请求头
+     * 发送get请求, uri参数可变
      *
      * @return String
      */
-    public String restGet(String uri, Map<String, String> uriVeriables, Map<String, String> headers, String contentType) {
+    public String restGet(String uri, Map<String, String> uriVeriables) {
+        ResponseEntity<String> responseEntity = restGet(uri, uriVeriables, null);
+
+        return responseEntity == null ? "" : responseEntity.getBody();
+    }
+
+    /**
+     * 发送get请求, uri参数可变, 带请求头
+     *
+     * @return String
+     */
+    public ResponseEntity<String> restGet(String uri, Map<String, String> uriVeriables, Map<String, String> headers) {
 
         // 校验uri非空
         checkURI(uri);
 
         // 设置requestHeaders
-        HttpHeaders httpHeaders = new HttpHeaders();;
-        httpHeaders.set("Content-type", StringUtil.isNull(contentType) ? "application/x-www-form-urlencoded;charset=UTF-8" : contentType);
+        HttpHeaders httpHeaders = new HttpHeaders();
         if (headers != null && headers.size() > 0) {
             Set<Map.Entry<String, String>> set = headers.entrySet();
             for (Map.Entry<String, String> entry : set) {
@@ -141,20 +164,18 @@ public enum RestHttpUtil {
         }
 
         // 设置requestEntity
-        HttpEntity<String> requestEntity = new HttpEntity<String>(null, httpHeaders);
-
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, httpHeaders);
         RestTemplate temp = getRestTemplate();
-
-        ResponseEntity<String> response = null;
+        ResponseEntity<String> responseEntity;
 
         // uriVeriables不为空时, 替换uri中的参数
         if (uriVeriables != null && uriVeriables.size() > 0) {
-            response = temp.exchange(uri, HttpMethod.GET, requestEntity, String.class, uriVeriables);
+            responseEntity = temp.exchange(uri, HttpMethod.GET, requestEntity, String.class, uriVeriables);
         } else {
-            response = temp.exchange(uri, HttpMethod.GET, requestEntity, String.class);
+            responseEntity = temp.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         }
 
-        return response.getBody();
+        return responseEntity;
     }
 
     /* 校验请求uri */

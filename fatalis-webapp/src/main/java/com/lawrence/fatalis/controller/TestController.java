@@ -355,7 +355,7 @@ public class TestController extends BaseController {
         JSONObject param = new JSONObject();
         param.put("name", "lawrence");
         String res = RestHttpUtil.INSTANCE.restPost("http://localhost/fatalis-webapp/test/http/{veriable}?uriparam=uriParam",
-                ver, headers, param, "application/json;charset=UTF-8");
+                ver, headers, param, "application/json;charset=UTF-8").getBody();
         System.out.println(res);
 
     }
